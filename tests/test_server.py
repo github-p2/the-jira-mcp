@@ -1,6 +1,6 @@
 """Tests for the JIRA MCP Server."""
 
-import pytest
+import pytest  # type: ignore
 
 from jira_mcp_server import JiraMCPServer, add_numbers, hello_world
 
