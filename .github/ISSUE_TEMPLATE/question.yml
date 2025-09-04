@@ -1,0 +1,77 @@
+name: ❓ Question
+description: Ask a question about usage, configuration, or general help
+title: "[QUESTION] "
+labels: ["question", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your question! Please fill out the form below to help us provide the best assistance.
+
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Search for existing answers
+      description: Please check if your question has already been answered
+      options:
+        - label: I have searched the documentation
+          required: true
+        - label: I have searched existing issues and discussions
+          required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Question Category
+      description: What type of question is this?
+      options:
+        - Installation and Setup
+        - Configuration
+        - Usage and API
+        - Authentication
+        - Performance
+        - Troubleshooting
+        - Integration
+        - Best Practices
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: Please describe your question in detail
+      placeholder: What would you like to know?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide any relevant context about what you're trying to achieve
+      placeholder: |
+        What are you trying to accomplish?
+        What have you tried so far?
+        Any specific constraints or requirements?
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment (if relevant)
+      description: Provide environment details if they're relevant to your question
+      placeholder: |
+        - OS: [e.g., macOS 13.0, Ubuntu 22.04, Windows 11]
+        - Python version: [e.g., 3.9.7]
+        - jira-mcp-server version: [e.g., 1.0.0]
+        - JIRA version: [e.g., Cloud, Server 8.5]
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: Any other information that might be helpful
+      placeholder: Code snippets, configuration files, error messages, etc.
