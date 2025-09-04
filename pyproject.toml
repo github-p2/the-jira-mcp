@@ -1,0 +1,270 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "jira-mcp-server"
+version = "0.1.0"
+description = "Enterprise-grade JIRA MCP (Model Context Protocol) Server with dual deployment modes: remote server and self-contained stdio deployment."
+authors = [
+    {name = "JIRA MCP Server Team", email = "maintainers@jira-mcp-server.dev"}
+]
+readme = "README.md"
+license = {text = "AGPL-3.0-or-later"}
+keywords = ["jira", "mcp", "model-context-protocol", "api", "server"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: System :: Systems Administration",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "httpx>=0.25.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "click>=8.1.7",
+    "structlog>=23.2.0",
+    "tenacity>=8.2.3",
+    "python-jose[cryptography]>=3.3.0",
+    "python-multipart>=0.0.6",
+    "jira>=3.5.0",
+]
+
+[project.optional-dependencies]
+server = ["uvicorn[standard]>=0.24.0", "fastapi>=0.104.0"]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.1",
+    "pytest-mock>=3.12.0",
+    "black>=23.11.0",
+    "ruff>=0.1.6",
+    "mypy>=1.7.1",
+    "bandit>=1.7.5",
+    "pre-commit>=3.6.0",
+    "tox>=4.11.4",
+    "faker>=20.1.0",
+]
+
+[project.urls]
+homepage = "https://github.com/yourusername/jira-mcp-server"
+repository = "https://github.com/yourusername/jira-mcp-server"
+documentation = "https://docs.jira-mcp-server.dev"
+
+[project.scripts]
+jira-mcp-server = "jira_mcp_server.cli:main"
+
+[tool.poetry]
+name = "jira-mcp-server"
+version = "0.1.0"
+description = "Enterprise-grade JIRA MCP (Model Context Protocol) Server with dual deployment modes: remote server and self-contained stdio deployment."
+authors = ["JIRA MCP Server Team <maintainers@jira-mcp-server.dev>"]
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+homepage = "https://github.com/yourusername/jira-mcp-server"
+repository = "https://github.com/yourusername/jira-mcp-server"
+documentation = "https://docs.jira-mcp-server.dev"
+keywords = ["jira", "mcp", "model-context-protocol", "api", "server"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: System :: Systems Administration",
+]
+packages = [
+    { include = "jira_mcp_server", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+httpx = "^0.25.0"
+pydantic = "^2.5.0"
+pydantic-settings = "^2.1.0"
+uvicorn = {extras = ["standard"], version = "^0.24.0", optional = true}
+fastapi = {version = "^0.104.0", optional = true}
+click = "^8.1.7"
+structlog = "^23.2.0"
+tenacity = "^8.2.3"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-multipart = "^0.0.6"
+jira = "^3.5.0"
+
+[tool.poetry.extras]
+server = ["uvicorn", "fastapi"]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-asyncio",
+    "pytest-mock",
+    "black",
+    "ruff",
+    "mypy",
+    "bandit",
+    "pre-commit",
+    "tox",
+    "faker",
+]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
+pytest-asyncio = "^0.21.1"
+pytest-mock = "^3.12.0"
+black = "^23.11.0"
+ruff = "^0.1.6"
+mypy = "^1.7.1"
+bandit = "^1.7.5"
+pre-commit = "^3.6.0"
+tox = "^4.11.4"
+httpx-mock = "^0.11.0"
+faker = "^20.1.0"
+
+[tool.poetry.scripts]
+jira-mcp-server = "jira_mcp_server.cli:main"
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | docs
+)/
+'''
+
+[tool.ruff]
+target-version = "py38"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*" = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["jira_mcp_server"]
+
+[tool.mypy]
+python_version = "3.9"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+no_implicit_reexport = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+    "jira.*",
+    "uvicorn.*",
+    "click.*",
+    "structlog.*",
+    "tenacity.*",
+    "jose.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src/jira_mcp_server",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=70",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".venv", "build", "dist"]
+skips = ["B101", "B601"]
+
+[tool.bandit.assert_used]
+skips = ["*_test.py", "test_*.py"]
