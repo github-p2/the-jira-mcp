@@ -1,22 +1,17 @@
 .PHONY: help install dev-setup test test-cov lint format format-check security-check clean docs
 .DEFAULT_GOAL := help
 
-# Detect if we're using Poetry or uv
-HAS_POETRY := $(shell command -v poetry 2> /dev/null)
+# Using uv for package management
 HAS_UV := $(shell command -v uv 2> /dev/null)
 
 ifdef HAS_UV
     PYTHON_RUNNER = uv run
     INSTALL_CMD = uv pip install -e ".[dev]"
-    SYNC_CMD = uv pip sync requirements-dev.txt
-else ifdef HAS_POETRY
-    PYTHON_RUNNER = poetry run
-    INSTALL_CMD = poetry install --extras dev
-    SYNC_CMD = poetry install --sync
+    SYNC_CMD = uv sync
 else
     PYTHON_RUNNER = python -m
     INSTALL_CMD = pip install -e ".[dev]"
-    SYNC_CMD = pip install -r requirements-dev.txt
+    SYNC_CMD = pip install -r requirements.txt
 endif
 
 help: ## Show this help message
@@ -33,11 +28,8 @@ dev-setup: install ## Set up development environment
 	@echo "🔧 Setting up development environment..."
 ifdef HAS_UV
 	@echo "Using uv for dependency management"
-	uv venv --python 3.8
+	uv venv --python 3.9
 	@echo "Activate with: source .venv/bin/activate"
-else ifdef HAS_POETRY
-	@echo "Using Poetry for dependency management"
-	poetry install --extras dev
 else
 	@echo "Using pip for dependency management"
 	python -m venv .venv
@@ -126,8 +118,6 @@ ci-install: ## Install dependencies for CI
 	@echo "🤖 Installing CI dependencies..."
 ifdef HAS_UV
 	uv pip install -e ".[dev]"
-else ifdef HAS_POETRY
-	poetry install --extras dev --no-interaction --no-ansi
 else
 	pip install -e ".[dev]"
 endif
@@ -138,9 +128,7 @@ ci-test: ## Run CI tests
 
 ##@ Development Utilities
 show-deps: ## Show dependency tree
-ifdef HAS_POETRY
-	poetry show --tree
-else ifdef HAS_UV
+ifdef HAS_UV
 	uv pip list
 else
 	pip list
@@ -148,25 +136,19 @@ endif
 
 update-deps: ## Update dependencies
 	@echo "📦 Updating dependencies..."
-ifdef HAS_POETRY
-	poetry update
-else ifdef HAS_UV
-	uv pip install --upgrade -e ".[dev]"
+ifdef HAS_UV
+	uv lock --upgrade
+	uv pip install -e ".[dev]"
 else
 	pip install --upgrade -e ".[dev]"
 endif
 
 check-deps: ## Check for dependency vulnerabilities
 	@echo "🔒 Checking dependencies for vulnerabilities..."
-ifdef HAS_POETRY
-	poetry audit || echo "Poetry audit not available, consider using pip-audit"
-else
-	pip-audit || echo "pip-audit not installed, run: pip install pip-audit"
-endif
+	pip-audit || echo "pip-audit not installed, run: uv pip install pip-audit"
 
 env-info: ## Show environment information
 	@echo "🔍 Environment Information:"
 	@echo "Python version: $$(python --version)"
-	@echo "Poetry: $$(command -v poetry >/dev/null && echo 'installed' || echo 'not found')"
 	@echo "uv: $$(command -v uv >/dev/null && echo 'installed' || echo 'not found')"
 	@echo "Virtual env: $${VIRTUAL_ENV:-'not activated'}"
