@@ -1,0 +1,155 @@
+# JIRA MCP Server Knowledge Store
+# This file maps common questions to JQL queries
+
+queries:
+  - description: "Find all open bugs"
+    question_patterns:
+      - "open bugs"
+      - "active bugs"
+      - "unresolved bugs"
+      - "bugs that are open"
+    jql_query: "type = Bug AND status != Done AND status != Closed"
+    examples:
+      - "Show me all open bugs"
+      - "What are the active bugs?"
+
+  - description: "Find critical priority issues"
+    question_patterns:
+      - "critical issues"
+      - "high priority issues"
+      - "urgent issues"
+      - "critical priority"
+    jql_query: "priority = Critical OR priority = High"
+    examples:
+      - "Show me critical issues"
+      - "What are the high priority items?"
+
+  - description: "Find my assigned issues"
+    question_patterns:
+      - "my issues"
+      - "assigned to me"
+      - "my tasks"
+      - "issues for me"
+    jql_query: "assignee = currentUser()"
+    examples:
+      - "What issues are assigned to me?"
+      - "Show my tasks"
+
+  - description: "Find recently created issues"
+    question_patterns:
+      - "recent issues"
+      - "new issues"
+      - "recently created"
+      - "latest issues"
+    jql_query: "created >= -7d"
+    examples:
+      - "What issues were created recently?"
+      - "Show me new issues from this week"
+
+  - description: "Find issues updated today"
+    question_patterns:
+      - "updated today"
+      - "changed today"
+      - "modified today"
+      - "today's updates"
+    jql_query: "updated >= startOfDay()"
+    examples:
+      - "What was updated today?"
+      - "Show me today's changes"
+
+  - description: "Find overdue issues"
+    question_patterns:
+      - "overdue"
+      - "past due"
+      - "missed deadline"
+      - "overdue tasks"
+    jql_query: "due < now() AND status != Done"
+    examples:
+      - "What issues are overdue?"
+      - "Show me past due items"
+
+  - description: "Find unassigned issues"
+    question_patterns:
+      - "unassigned"
+      - "no assignee"
+      - "without assignee"
+      - "nobody assigned"
+    jql_query: "assignee is EMPTY"
+    examples:
+      - "What issues are unassigned?"
+      - "Show me issues without an assignee"
+
+  - description: "Find in progress work"
+    question_patterns:
+      - "in progress"
+      - "work in progress"
+      - "currently working"
+      - "active work"
+    jql_query: "status = 'In Progress'"
+    examples:
+      - "What work is in progress?"
+      - "Show me active development"
+
+  - description: "Find issues by project"
+    question_patterns:
+      - "project issues"
+      - "specific project"
+      - "from project"
+    jql_query: "project = '{PROJECT_KEY}'"
+    examples:
+      - "Show me issues from project ABC"
+      - "What are the issues in project XYZ?"
+
+  - description: "Find story points summary"
+    question_patterns:
+      - "story points"
+      - "points estimate"
+      - "effort estimation"
+    jql_query: "type = Story AND 'Story Points' is not EMPTY"
+    examples:
+      - "Show me stories with story points"
+      - "What's the effort estimation?"
+
+  - description: "Find blocked issues"
+    question_patterns:
+      - "blocked"
+      - "impediments"
+      - "blockers"
+      - "blocked work"
+    jql_query: "status = Blocked OR labels = blocked"
+    examples:
+      - "What issues are blocked?"
+      - "Show me impediments"
+
+  - description: "Find issues ready for review"
+    question_patterns:
+      - "ready for review"
+      - "review needed"
+      - "code review"
+      - "pending review"
+    jql_query: "status = 'Code Review' OR status = 'Ready for Review'"
+    examples:
+      - "What needs review?"
+      - "Show me items ready for review"
+
+  - description: "Find issues waiting for deployment"
+    question_patterns:
+      - "ready to deploy"
+      - "deployment ready"
+      - "waiting for release"
+      - "ready for production"
+    jql_query: "status = 'Ready for Deploy' OR status = 'Done' AND fixVersion is EMPTY"
+    examples:
+      - "What's ready to deploy?"
+      - "Show me items waiting for release"
+
+  - description: "Find epics and their status"
+    question_patterns:
+      - "epics"
+      - "epic status"
+      - "large features"
+      - "epic progress"
+    jql_query: "type = Epic"
+    examples:
+      - "Show me all epics"
+      - "What's the status of our epics?"

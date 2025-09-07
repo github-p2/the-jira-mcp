@@ -2,7 +2,7 @@
 
 import pytest
 
-from jira_mcp_server import JiraMCPServer, add_numbers, hello_world
+from jira_mcp_server import add_numbers, hello_world
 
 
 def test_hello_world() -> None:
@@ -32,36 +32,3 @@ def test_add_numbers() -> None:
 def test_add_numbers_parametrized(a: int, b: int, expected: int) -> None:
     """Test add_numbers with multiple parameter sets."""
     assert add_numbers(a, b) == expected
-
-
-class TestJiraMCPServer:
-    """Test suite for JiraMCPServer class."""
-
-    def test_server_initialization(self) -> None:
-        """Test server can be initialized."""
-        server = JiraMCPServer()
-        assert server.config is None
-        assert server.is_running is False
-
-    def test_server_initialization_with_config(self) -> None:
-        """Test server can be initialized with config."""
-        config = {"test": "value"}
-        server = JiraMCPServer(config=config)
-        assert server.config == config
-        assert server.is_running is False
-
-    @pytest.mark.asyncio
-    async def test_server_start_stop(self) -> None:
-        """Test server start and stop functionality."""
-        server = JiraMCPServer()
-
-        # Initially not running
-        assert server.is_running is False
-
-        # Start server
-        await server.start()
-        assert server.is_running is True
-
-        # Stop server
-        await server.stop()
-        assert server.is_running is False

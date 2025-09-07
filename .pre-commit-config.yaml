@@ -12,6 +12,16 @@ repos:
       - id: debug-statements
       - id: mixed-line-ending
 
+  # Security: Prevent credential leaks
+  - repo: local
+    hooks:
+      - id: check-credentials
+        name: Check for hardcoded credentials
+        entry: uv run python scripts/check_credentials.py
+        language: system
+        files: \.(py|yaml|yml|json|env|sh)$
+        exclude: ^(\.venv/|docs/testing/.*\.sh|examples/.*\.json|\.secrets\.baseline)$
+
   - repo: https://github.com/psf/black
     rev: 23.11.0
     hooks:

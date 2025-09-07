@@ -268,3 +268,26 @@ Icon?
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Environment files - NEVER commit these
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
+
+# Credentials and secrets
+secrets.json
+credentials.json
+config.json
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# IDE specific files that might contain credentials
+.vscode/settings.json
+.idea/workspace.xml
+.idea/tasks.xml
