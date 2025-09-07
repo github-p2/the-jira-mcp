@@ -23,16 +23,48 @@ class TestJiraClient:
 
     @patch("jira_mcp_server.jira_client.JIRA")
     def test_initialization_with_username(self, mock_jira, jira_config) -> None:
-        """Test client initialization with username."""
+        """Test client initialization with username (tries Bearer auth first)."""
         mock_jira_instance = Mock()
         mock_jira.return_value = mock_jira_instance
 
         client = JiraClient(jira_config)
 
-        mock_jira.assert_called_once_with(
+        # Should first try Bearer token authentication
+        mock_jira.assert_called_with(
             server="https://test.atlassian.net",
-            basic_auth=("test-user", "test-token-123"),
+            token_auth="test-token-123",
         )
+        assert client.client == mock_jira_instance
+
+    @patch("jira_mcp_server.jira_client.JIRA")
+    def test_initialization_with_username_fallback_to_basic(
+        self, mock_jira, jira_config
+    ) -> None:
+        """Test client initialization falls back to basic auth when Bearer fails."""
+        mock_jira_instance = Mock()
+
+        # First call (Bearer auth) raises exception, second call (basic auth) succeeds
+        mock_jira.side_effect = [Exception("Bearer auth failed"), mock_jira_instance]
+
+        client = JiraClient(jira_config)
+
+        # Should be called twice: first Bearer, then basic auth
+        assert mock_jira.call_count == 2
+
+        # First call: Bearer token auth
+        first_call = mock_jira.call_args_list[0]
+        assert first_call.kwargs == {
+            "server": "https://test.atlassian.net",
+            "token_auth": "test-token-123",
+        }
+
+        # Second call: Basic auth fallback
+        second_call = mock_jira.call_args_list[1]
+        assert second_call.kwargs == {
+            "server": "https://test.atlassian.net",
+            "basic_auth": ("test-user", "test-token-123"),
+        }
+
         assert client.client == mock_jira_instance
 
     @patch("jira_mcp_server.jira_client.JIRA")

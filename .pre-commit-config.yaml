@@ -50,6 +50,33 @@ repos:
         args: [-c, pyproject.toml]
         additional_dependencies: ["bandit[toml]", "pbr"]
 
+  # CI-mirroring checks
+  - repo: local
+    hooks:
+      - id: black-check
+        name: Check Black formatting (strict)
+        entry: uv run black --check --diff
+        language: system
+        files: \.py$
+        args: [--line-length=88]
+
+      - id: pytest-fast
+        name: Run tests (fast)
+        entry: uv run pytest
+        language: system
+        args: [--no-cov, -x, --tb=short]
+        files: \.(py)$
+        pass_filenames: false
+
+      - id: pytest-check
+        name: Run tests with basic coverage
+        entry: uv run pytest
+        language: system
+        args: [--cov=src/jira_mcp_server, --cov-fail-under=70, --tb=short]
+        files: \.(py)$
+        pass_filenames: false
+        stages: [manual]
+
 
 ci:
     autofix_commit_msg: |

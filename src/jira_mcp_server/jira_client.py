@@ -134,17 +134,23 @@ class JiraClient:
                     "key": issue.key,
                     "summary": issue.fields.summary,
                     "status": issue.fields.status.name,
-                    "assignee": getattr(issue.fields.assignee, "displayName", None)
-                    if issue.fields.assignee
-                    else None,
-                    "reporter": getattr(issue.fields.reporter, "displayName", None)
-                    if issue.fields.reporter
-                    else None,
+                    "assignee": (
+                        getattr(issue.fields.assignee, "displayName", None)
+                        if issue.fields.assignee
+                        else None
+                    ),
+                    "reporter": (
+                        getattr(issue.fields.reporter, "displayName", None)
+                        if issue.fields.reporter
+                        else None
+                    ),
                     "created": issue.fields.created,
                     "updated": issue.fields.updated,
-                    "priority": getattr(issue.fields.priority, "name", None)
-                    if issue.fields.priority
-                    else None,
+                    "priority": (
+                        getattr(issue.fields.priority, "name", None)
+                        if issue.fields.priority
+                        else None
+                    ),
                     "issuetype": issue.fields.issuetype.name,
                     "project": issue.fields.project.key,
                 }
@@ -190,9 +196,11 @@ class JiraClient:
                     "key": project.key,
                     "name": project.name,
                     "description": getattr(project, "description", ""),
-                    "lead": getattr(project.lead, "displayName", None)
-                    if hasattr(project, "lead") and project.lead
-                    else None,
+                    "lead": (
+                        getattr(project.lead, "displayName", None)
+                        if hasattr(project, "lead") and project.lead
+                        else None
+                    ),
                 }
                 for project in projects
             ]
