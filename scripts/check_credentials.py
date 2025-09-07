@@ -61,9 +61,7 @@ def main():
                 # Always check for high-confidence credential patterns
                 for pattern in credential_patterns:
                     if re.search(pattern, content, re.IGNORECASE):
-                        print(
-                            f"❌ Potential credential found in {file_path}: {pattern}"
-                        )
+                        print(f"❌ Potential credential found in {file_path}: {pattern}")
                         found_credentials = True
 
                 # Check generic patterns only in non-test files

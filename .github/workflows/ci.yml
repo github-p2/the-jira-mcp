@@ -41,6 +41,10 @@ jobs:
         run: |
           uv run black --check .
 
+      - name: Validate dependency sync
+        run: |
+          uv run python scripts/sync_dependencies.py
+
       - name: Type checking (mypy)
         run: |
           uv run mypy src/

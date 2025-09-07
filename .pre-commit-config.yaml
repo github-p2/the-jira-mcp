@@ -39,7 +39,7 @@ repos:
     rev: v1.7.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, types-PyYAML, httpx, pydantic, pydantic-settings, click, structlog, tenacity, python-jose, python-multipart, jira]
+        additional_dependencies: [types-requests, types-PyYAML, httpx, pydantic, pydantic-settings, click, structlog, tenacity, python-jose, python-multipart, jira, mcp, pyyaml]
         args: [--install-types, --non-interactive]
         files: ^src/
 
@@ -53,12 +53,20 @@ repos:
   # CI-mirroring checks
   - repo: local
     hooks:
+      - id: dependency-sync
+        name: Validate CI/pre-commit dependency sync
+        entry: uv run python scripts/sync_dependencies.py
+        language: system
+        files: \.(py|yaml|yml|toml)$
+        pass_filenames: false
+
       - id: black-check
         name: Check Black formatting (strict)
         entry: uv run black --check --diff
         language: system
         files: \.py$
         args: [--line-length=88]
+        stages: [manual]
 
       - id: pytest-fast
         name: Run tests (fast)

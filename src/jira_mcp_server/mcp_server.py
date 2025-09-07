@@ -1,11 +1,11 @@
 """MCP Server implementation for JIRA integration."""
 
 import sys
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import structlog
 
-try:
+if TYPE_CHECKING:
     from mcp.server import Server
     from mcp.server.stdio import stdio_server
     from mcp.types import (
@@ -13,10 +13,19 @@ try:
         TextContent,
         Tool,
     )
-except ImportError:
-    # Handle case when MCP is not available (e.g., for static analysis)
-    Server = None
-    stdio_server = None
+else:
+    try:
+        from mcp.server import Server
+        from mcp.server.stdio import stdio_server
+        from mcp.types import (
+            CallToolResult,
+            TextContent,
+            Tool,
+        )
+    except ImportError:
+        # Handle case when MCP is not available (e.g., for static analysis)
+        Server = None  # type: ignore[misc,assignment]
+        stdio_server = None  # type: ignore[misc,assignment]
 
 from .config import Config
 from .jira_client import JiraClient
@@ -45,7 +54,7 @@ class JiraMCPServer:
     def _setup_tools(self) -> None:
         """Set up MCP tools for JIRA operations."""
 
-        @self.server.list_tools()  # type: ignore[misc]
+        @self.server.list_tools()  # type: ignore[misc,no-untyped-call]
         async def handle_list_tools() -> list[Tool]:
             """List available tools."""
             return [
@@ -372,4 +381,4 @@ class JiraMCPServer:
 
         # Run the STDIO server
         async with stdio_server() as (read_stream, write_stream):
-            await self.server.run(read_stream, write_stream)
+            await self.server.run(read_stream, write_stream)  # type: ignore[call-arg]
