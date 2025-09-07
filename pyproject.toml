@@ -18,8 +18,6 @@ classifiers = [
     "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -27,7 +25,7 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
     "Topic :: System :: Systems Administration",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "httpx>=0.25.0",
     "pydantic>=2.5.0",
@@ -38,6 +36,9 @@ dependencies = [
     "python-jose[cryptography]>=3.3.0",
     "python-multipart>=0.0.6",
     "jira>=3.5.0",
+    "mcp>=1.0.0",
+    "pyyaml>=6.0.0",
+    "pre-commit>=4.3.0",
 ]
 
 [project.optional-dependencies]
@@ -54,6 +55,7 @@ dev = [
     "pre-commit>=3.6.0",
     "tox>=4.11.4",
     "faker>=20.1.0",
+    "types-pyyaml>=6.0.12.20250822",
 ]
 
 [project.urls]
@@ -67,7 +69,7 @@ jira-mcp-server = "jira_mcp_server.cli:main"
 
 [tool.black]
 line-length = 88
-target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+target-version = ['py310', 'py311', 'py312']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -85,7 +87,7 @@ extend-exclude = '''
 '''
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py310"
 line-length = 88
 
 [tool.ruff.lint]
@@ -112,7 +114,7 @@ ignore = [
 known-first-party = ["jira_mcp_server"]
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 check_untyped_defs = true
 disallow_any_generics = true
 disallow_incomplete_defs = true
@@ -146,6 +148,7 @@ module = [
     "structlog.*",
     "tenacity.*",
     "jose.*",
+    "mcp.*",
 ]
 ignore_missing_imports = true
 
@@ -200,3 +203,8 @@ skips = ["B101", "B601"]
 
 [tool.bandit.assert_used]
 skips = ["*_test.py", "test_*.py"]
+
+[dependency-groups]
+dev = [
+    "detect-secrets>=1.5.0",
+]

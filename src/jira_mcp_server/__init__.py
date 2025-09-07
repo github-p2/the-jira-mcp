@@ -8,9 +8,19 @@ __version__ = "0.1.0"
 __author__ = "JIRA MCP Server Team"
 __email__ = "maintainers@jira-mcp-server.dev"
 
-from typing import Any
+# Import main components
+from .config import Config, JiraConfig, ServerConfig
+from .jira_client import JiraClient
+from .knowledge_store import (
+    KnowledgeStoreFactory,
+    KnowledgeStoreInterface,
+    QueryMapping,
+    YamlKnowledgeStore,
+)
+from .mcp_server import JiraMCPServer
 
 
+# Legacy functions for backward compatibility
 def hello_world() -> str:
     """Return a greeting message.
 
@@ -33,25 +43,16 @@ def add_numbers(a: int, b: int) -> int:
     return a + b
 
 
-class JiraMCPServer:
-    """Main JIRA MCP Server class.
-
-    This is a placeholder implementation for testing the development setup.
-    """
-
-    def __init__(self, config: Any = None) -> None:
-        """Initialize the JIRA MCP Server.
-
-        Args:
-            config: Configuration object (placeholder)
-        """
-        self.config = config
-        self.is_running = False
-
-    async def start(self) -> None:
-        """Start the MCP server."""
-        self.is_running = True
-
-    async def stop(self) -> None:
-        """Stop the MCP server."""
-        self.is_running = False
+__all__ = [
+    "JiraMCPServer",
+    "JiraClient",
+    "Config",
+    "JiraConfig",
+    "ServerConfig",
+    "KnowledgeStoreFactory",
+    "KnowledgeStoreInterface",
+    "QueryMapping",
+    "YamlKnowledgeStore",
+    "hello_world",
+    "add_numbers",
+]

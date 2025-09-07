@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "jira": {
+      "command": "uv",
+      "args": ["run", "jira-mcp-server", "stdio"],
+      "cwd": "/Users/priyeshpotdar/Code/Priyesh/the-jira-mcp",
+      "env": {
+        "JIRA_URL": "https://your-company.atlassian.net",
+        "JIRA_TOKEN": "your-api-token-here",
+        "JIRA_USERNAME": "your-email@company.com"
+      }
+    }
+  }
+}

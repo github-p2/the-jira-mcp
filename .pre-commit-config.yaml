@@ -12,12 +12,22 @@ repos:
       - id: debug-statements
       - id: mixed-line-ending
 
+  # Security: Prevent credential leaks
+  - repo: local
+    hooks:
+      - id: check-credentials
+        name: Check for hardcoded credentials
+        entry: uv run python scripts/check_credentials.py
+        language: system
+        files: \.(py|yaml|yml|json|env|sh)$
+        exclude: ^(\.venv/|docs/testing/.*\.sh|examples/.*\.json|\.secrets\.baseline)$
+
   - repo: https://github.com/psf/black
-    rev: 23.11.0
+    rev: 25.1.0
     hooks:
       - id: black
         language_version: python3
-        args: [--line-length=88]
+        args: [--check, --line-length=88]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.6
@@ -29,7 +39,7 @@ repos:
     rev: v1.7.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, types-PyYAML, httpx, pydantic, pydantic-settings, click, structlog, tenacity, python-jose, python-multipart, jira]
+        additional_dependencies: [types-requests, types-PyYAML, httpx, pydantic, pydantic-settings, click, structlog, tenacity, python-jose, python-multipart, jira, mcp, pyyaml]
         args: [--install-types, --non-interactive]
         files: ^src/
 
@@ -39,6 +49,41 @@ repos:
       - id: bandit
         args: [-c, pyproject.toml]
         additional_dependencies: ["bandit[toml]", "pbr"]
+
+  # CI-mirroring checks
+  - repo: local
+    hooks:
+      - id: dependency-sync
+        name: Validate CI/pre-commit dependency sync
+        entry: uv run python scripts/sync_dependencies.py
+        language: system
+        files: \.(py|yaml|yml|toml)$
+        pass_filenames: false
+
+      - id: black-format
+        name: Auto-format with Black
+        entry: uv run black
+        language: system
+        files: \.py$
+        args: [--line-length=88]
+        stages: [manual]
+
+      - id: pytest-fast
+        name: Run tests (fast)
+        entry: uv run pytest
+        language: system
+        args: [--no-cov, -x, --tb=short]
+        files: \.(py)$
+        pass_filenames: false
+
+      - id: pytest-check
+        name: Run tests with basic coverage
+        entry: uv run pytest
+        language: system
+        args: [--cov=src/jira_mcp_server, --cov-fail-under=70, --tb=short]
+        files: \.(py)$
+        pass_filenames: false
+        stages: [manual]
 
 
 ci:

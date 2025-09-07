@@ -61,6 +61,14 @@ security-check: ## Run security checks
 	@echo "🔒 Running security checks..."
 	$(PYTHON_RUNNER) bandit -r src/ -f json -o bandit-report.json || $(PYTHON_RUNNER) bandit -r src/
 
+security-scan: ## Run comprehensive credential scan
+	@echo "🔍 Running comprehensive credential scan..."
+	$(PYTHON_RUNNER) python scripts/full_security_scan.py
+
+security-scan-quick: ## Run quick credential check
+	@echo "⚡ Running quick credential check..."
+	$(PYTHON_RUNNER) python scripts/check_credentials.py $$(find . -name "*.py" -o -name "*.yaml" -o -name "*.yml" -o -name "*.json" -o -name "*.sh" | grep -v -E "(\.venv/|\.git/|__pycache__/)" | head -20)
+
 ##@ Testing
 test: ## Run tests
 	@echo "🧪 Running tests..."
