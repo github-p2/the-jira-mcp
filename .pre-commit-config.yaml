@@ -27,7 +27,7 @@ repos:
     hooks:
       - id: black
         language_version: python3
-        args: [--line-length=88]
+        args: [--check, --line-length=88]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.6
@@ -60,9 +60,9 @@ repos:
         files: \.(py|yaml|yml|toml)$
         pass_filenames: false
 
-      - id: black-check
-        name: Check Black formatting (strict)
-        entry: uv run black --check --diff
+      - id: black-format
+        name: Auto-format with Black
+        entry: uv run black
         language: system
         files: \.py$
         args: [--line-length=88]
