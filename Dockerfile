@@ -12,7 +12,7 @@ RUN uv venv /opt/venv && \
     uv pip install --frozen -e .
 
 # Production stage
-FROM python:3.9-slim AS runtime
+FROM python:3.13-slim AS runtime
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \
