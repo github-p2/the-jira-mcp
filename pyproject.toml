@@ -54,7 +54,7 @@ dev = [
     "bandit>=1.7.5",
     "pre-commit>=3.6.0",
     "tox>=4.11.4",
-    "faker>=20.1.0",
+    "faker>=40.13.0",
     "types-pyyaml>=6.0.12.20250822",
 ]
 
