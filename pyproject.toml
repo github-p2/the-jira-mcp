@@ -42,7 +42,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-server = ["uvicorn[standard]>=0.24.0", "fastapi>=0.104.0"]
+server = ["uvicorn[standard]>=0.44.0", "fastapi>=0.104.0"]
 dev = [
     "pytest>=7.4.3",
     "pytest-cov>=4.1.0",
